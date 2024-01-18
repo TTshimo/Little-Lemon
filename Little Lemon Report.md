@@ -1,5 +1,6 @@
 # LITTLE LEMON REPORT
-*Prepared By:  Tumisang Tshimologo*
+*Prepared By:  Tumisang Tshimologo* 
+
 *Date: 16/01/2024*
 
 ## PROJECT OVERVIEW
@@ -31,6 +32,18 @@ Little Lemon Restaurant, a whimsical and vibrant culinary gem, was founded in 19
 ### Data Collection
 The dataset was acquired from the Google Coursera Data Analytics study materials.
 ### Data Description
+The following code snippet was executed to load the dataframe into the program.
+```py 
+dataframe = pd.read_csv('C:/Users/cse20-054/Documents/My Projects/DataAnalysis/Python/Little Lemon Project/Little Lemon.csv')
+```
+
+The code snippet below was used to describe the data provided.
+```py 
+# DATA DESCRPTION
+print('DATA INFORMATION: ', dataframe.info())
+print('DATA DESCPRITION: ', dataframe.describe())
+print('DATA SHAPE: ', dataframe.shape)
+```
 The provided dataset consisted of 21,000 entries and comprises 21 columns. The column names and the types of data contained in each column are as follows:
 
 - Row number: Natural numbers
@@ -56,11 +69,41 @@ The provided dataset consisted of 21,000 entries and comprises 21 columns. The c
 - Sides: Letters.
 
 ### Data Cleaning
-Null and repeated entries were removed, and text was converted to lowercase. After cleaning, the dataset consisted of 20,999 entries and 13 vital columns. 
+```py
+# DATA CLEANING
+no_null_dataframe = dataframe.dropna(axis=0)
+print('Null values dropped!')
+
+no_repeating_dataset = no_null_dataframe.drop_duplicates()
+print('Duplicates dropped!')
+
+no_repeating_dataset_lower = no_repeating_dataset.applymap(lambda x: x.lower() if isinstance(x, str) else x)
+print('String values converted to lower case!')
+
+columns_to_drop = ['Row Number', 'Order ID', 'Delivery Date', 'Customer Name', 'Country', 'Postal Code', 'Country Code', 'Delivery Cost']
+no_repeating_dataset_lower.drop(columns=columns_to_drop) # Drop the specified columns
+print('Unused columns dropped!')
+
+my_dataframe = no_repeating_dataset_lower
+```
+
+As shown in the above provided code snipper null and repeated entries were removed, and text was converted to lowercase. After cleaning, the dataset consisted of 20,999 entries and 13 vital columns. 
 
 ## EXPLORATORY DATA ANALYSIS (EDA)
 ### Key Statistics
-Sales have the following statistics:
+```py
+# 1. SALES
+# Descriptive Statistics
+stats = my_dataframe['Sales'].describe()
+
+# Additional Statistics
+mean = my_dataframe['Sales'].mean()
+median = my_dataframe['Sales'].median()
+mode = my_dataframe['Sales'].mode().iloc[0]
+std_dev = my_dataframe['Sales'].std()
+quartiles = my_dataframe['Sales'].quantile([0.25, 0.5, 0.75])
+```
+The code snippet provided above was executed to obtain sales statistics. Sales have the following statistics:
 - Mean: 220.55
 - Median: 220.55
 - Mode: 66.86
@@ -69,7 +112,13 @@ Sales have the following statistics:
 - Max: 480
 - Count: 20,958
 - Quartiles: 25% - 137.76, 50% - 186.93, 75% - 315.0
-Additionally, Little Lemon has 998 customers in 973 cities, ordering from three cuisines.
+
+```py
+unique_customer_ids = my_dataframe['Customer ID'].nunique()
+unique_cities = my_dataframe['City'].nunique()
+unique_courses = my_dataframe['Cuisine Name'].nunique()
+```
+Additionally, Little Lemon has 998 customers in 973 cities, ordering from three cuisines and the above code snippet was utilized to obtain these values.
 
 ### Visualization
 #### 1. Customers ordering each cuisine
